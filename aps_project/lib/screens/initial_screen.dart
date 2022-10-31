@@ -1,3 +1,4 @@
+import 'package:aps_project/screens/data_screen.dart';
 import 'package:flutter/material.dart';
 
 class InitialScreen extends StatefulWidget {
@@ -17,13 +18,13 @@ class _InitialScreenState extends State<InitialScreen> {
         ),
         body: ListView(children: const [
           Location(
-              'Liberdade',
+              'Instuto EcoFaxina',
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRt_-wPiRvD0FS2DY-Jdb7PKIHjeGVdfqx4eygB_QDhDA&s',
-              '11535050'),
+              '11025-010','O Instituto Ecofaxina foi criado em 2008 pelo seu atual presidente, Willian Schepis, como um projeto pequeno desenvolvido por ele e outros alunos da Unisanta no curso de Biologia marinha. O projeto foi crescendo logo após sua criação, com uma motivação inicial de reduzir ao máximo a quantidade de resíduos disponíveis no estuário (conjunto das praias e mangues) de Santos, combater a poluição marinha e dar visibilidade a este problema e como o mesmo impacta não só na questão ambiental, mas também no âmbito social.'),
           Location(
-              'Liberdade',
+              'Praiamar Shopping',
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRt_-wPiRvD0FS2DY-Jdb7PKIHjeGVdfqx4eygB_QDhDA&s',
-              '11535050'),
+              '11025202', 'O Praiamar Shopping é um dos locais de lazer mais conhecidos e visitados de Santos. Situado no bairro da Aparecida, o local possui uma solução sustentável em relação à água que utiliza, pois usam água de reuso. Segundo Valdez, o projeto foi implementado em 2015, onde seu intuito inicial além de economizar água, era também economizar dinheiro'),
         ]));
   }
 }
@@ -32,8 +33,10 @@ class Location extends StatefulWidget {
   final String nome;
   final String picture;
   final String cep;
+  final String descricao;
 
-  const Location(this.nome, this.picture, this.cep, {Key? key}) : super(key: key);
+  const Location(this.nome, this.picture, this.cep,this.descricao, {Key? key})
+      : super(key: key);
 
   @override
   State<Location> createState() => _LocationState();
@@ -103,7 +106,13 @@ class _LocationState extends State<Location> {
                           width: 52,
                           height: 52,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (contextNew) =>
+                                          DataLocation(widget.cep,widget.descricao)));
+                            },
                             child: const Icon(Icons.account_balance),
                           ),
                         ),
