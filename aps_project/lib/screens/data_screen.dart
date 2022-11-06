@@ -1,5 +1,4 @@
 import 'package:aps_project/components/dados_field.dart';
-import 'package:aps_project/model/cep.dart';
 import 'package:flutter/material.dart';
 
 
@@ -11,7 +10,7 @@ class DataLocation extends StatefulWidget {
   final String? bairro;
   final String? estado;
 
-  DataLocation(this.cep,this.descr,this.rua,this.estado,this.bairro,this.cidade, {Key? key}) : super(key: key);
+  const DataLocation(this.cep,this.descr,this.rua,this.estado,this.bairro,this.cidade, {Key? key}) : super(key: key);
 
 
 

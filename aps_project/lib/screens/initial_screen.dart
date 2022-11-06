@@ -78,8 +78,6 @@ class _LocationState extends State<Location> {
     estado = listcep[0].uf;
     cidade = listcep[0].localidade;
     bairro = listcep[0].bairro;
-
-    print(rua);
   }
 
   @override
@@ -141,7 +139,6 @@ class _LocationState extends State<Location> {
                             onPressed: () {
                               setState(() {
                                 apidata();
-                                print(estado);
                               });
                               Navigator.push(
                                   context,
