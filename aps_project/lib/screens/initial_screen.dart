@@ -1,6 +1,11 @@
 import 'package:aps_project/screens/data_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../components/dados_field.dart';
+import '../model/cep.dart';
+
+
+
 class InitialScreen extends StatefulWidget {
   const InitialScreen({Key? key}) : super(key: key);
 
@@ -13,18 +18,26 @@ class _InitialScreenState extends State<InitialScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.black,
           leading: Container(),
-          title: const Text('Lugares'),
+          title: const Text(
+            'Lugares',
+            style: TextStyle(color: Colors.green),
+          ),
         ),
-        body: ListView(children: const [
+        body: ListView(children: [
           Location(
-              'Instuto EcoFaxina',
-              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRt_-wPiRvD0FS2DY-Jdb7PKIHjeGVdfqx4eygB_QDhDA&s',
-              '11025-010','O Instituto Ecofaxina foi criado em 2008 pelo seu atual presidente, Willian Schepis, como um projeto pequeno desenvolvido por ele e outros alunos da Unisanta no curso de Biologia marinha. O projeto foi crescendo logo após sua criação, com uma motivação inicial de reduzir ao máximo a quantidade de resíduos disponíveis no estuário (conjunto das praias e mangues) de Santos, combater a poluição marinha e dar visibilidade a este problema e como o mesmo impacta não só na questão ambiental, mas também no âmbito social.'),
+            'Instuto EcoFaxina',
+            'https://static.wixstatic.com/media/1fafda_963613349e43479597c0d555e36d0263~mv2.png',
+            '11025010',
+            'O Instituto Ecofaxina foi criado em 2008 pelo seu atual presidente, Willian Schepis, como um projeto pequeno desenvolvido por ele e outros alunos da Unisanta no curso de Biologia marinha. O projeto foi crescendo logo após sua criação, com uma motivação inicial de reduzir ao máximo a quantidade de resíduos disponíveis no estuário (conjunto das praias e mangues) de Santos, combater a poluição marinha e dar visibilidade a este problema e como o mesmo impacta não só na questão ambiental, mas também no âmbito social.',
+          ),
           Location(
-              'Praiamar Shopping',
-              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRt_-wPiRvD0FS2DY-Jdb7PKIHjeGVdfqx4eygB_QDhDA&s',
-              '11025202', 'O Praiamar Shopping é um dos locais de lazer mais conhecidos e visitados de Santos. Situado no bairro da Aparecida, o local possui uma solução sustentável em relação à água que utiliza, pois usam água de reuso. Segundo Valdez, o projeto foi implementado em 2015, onde seu intuito inicial além de economizar água, era também economizar dinheiro'),
+            'Praiamar Shopping',
+            'https://cdn.diariodolitoral.com.br/upload/dn_noticia/2020/05/praiamar_1.jpg',
+            '11025202',
+            'O Praiamar Shopping é um dos locais de lazer mais conhecidos e visitados de Santos. Situado no bairro da Aparecida, o local possui uma solução sustentável em relação à água que utiliza, pois usam água de reuso. Segundo Valdez, o projeto foi implementado em 2015, onde seu intuito inicial além de economizar água, era também economizar dinheiro',
+          ),
         ]));
   }
 }
@@ -35,8 +48,10 @@ class Location extends StatefulWidget {
   final String cep;
   final String descricao;
 
-  const Location(this.nome, this.picture, this.cep,this.descricao, {Key? key})
+  Location(this.nome, this.picture, this.cep, this.descricao, {Key? key})
       : super(key: key);
+
+
 
   @override
   State<Location> createState() => _LocationState();
@@ -48,6 +63,23 @@ class _LocationState extends State<Location> {
       return false;
     }
     return true;
+  }
+  String? rua;
+  String? cidade;
+  String? bairro;
+  String? estado;
+
+  apidata() async {
+    API api = new API();
+    List<Cep>? listcep = await api.getOne(widget.cep);
+
+
+    rua = listcep[0].logradouro;
+    estado = listcep[0].uf;
+    cidade = listcep[0].localidade;
+    bairro = listcep[0].bairro;
+
+    print(rua);
   }
 
   @override
@@ -107,11 +139,20 @@ class _LocationState extends State<Location> {
                           height: 52,
                           child: ElevatedButton(
                             onPressed: () {
+                              setState(() {
+                                apidata();
+                                print(estado);
+                              });
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (contextNew) =>
-                                          DataLocation(widget.cep,widget.descricao)));
+                                      builder: (contextNew) => DataLocation(
+                                          widget.cep,
+                                          widget.descricao,
+                                          rua,
+                                          estado,
+                                          bairro,
+                                          cidade)));
                             },
                             child: const Icon(Icons.account_balance),
                           ),
@@ -130,4 +171,5 @@ class _LocationState extends State<Location> {
       ),
     );
   }
+
 }
